@@ -1,6 +1,5 @@
 package equipo;
 /*
- * 16/03/2026
  * Asignatura: POO (Programación Orientada a Objetos)
  * Unidad 3: Proyecto en equipo
  * Clase: Agenda
@@ -41,7 +40,7 @@ public class Agenda {
 		// Ordena la agenda comparando los alias, si la comparación es positiva
 		// significa que c2 va antes, si es negativa, c1 va antes
 		// (c1,c2)-> es el comparador
-		agenda.sort((c1, c2) -> c1.getAlias().compareToIgnoreCase(c2.getAlias()));
+		agenda.sort((c1, c2) -> c1.getNombre().compareToIgnoreCase(c2.getNombre()));
 	}
 	//c) Método para agregar un Contacto a la agenda
 	public void agregarContacto(Contacto nuevoContacto) {
@@ -55,12 +54,12 @@ public class Agenda {
 	} 
 	
 	//d) Método para cambiar el correo de un contacto
-	public void cambiarCorreo(String dato, String nuevoCorreo) {
+	public void cambiarCorreo(String nombre, String alias, String nuevoCorreo) {
 	    boolean encontrado = false;
 	    // Primero se busca el contacto y al encontrarse se le cambia el correo
 	    for (Contacto c : agenda) {
-	        if (c.getNombre().equalsIgnoreCase(dato) || 
-	            c.getAlias().equalsIgnoreCase(dato)) {
+	        if (c.getNombre().equalsIgnoreCase(nombre) && 
+	            c.getAlias().equalsIgnoreCase(alias)) {
 	            c.setCorreo(nuevoCorreo);
 	            System.out.println("-- Correo modificado correctamente --");
 	            encontrado = true;
@@ -141,32 +140,42 @@ public class Agenda {
 	}
 	
 	//g) Método para eliminar los teléfonos de un contacto
-	public void eliminarTelefonoContacto(String alias, Telefono t1) {
-		// Dos índices requeridos para claridad
-		int indexContacto = 0;
-		int indexTelefono = 0;
+	public void eliminarTelefonoDeContacto(String alias, char tipo, Telefono t1) {
+		// Dos variables Contacto y Telefono para asesorarnos de cuando abortar el método
+		Contacto contactoEncontrado = null;
+		Telefono telefonoAEliminar = null;
 		for (Contacto c : agenda) {
-			// Se busca el correo iterando en la agenda y si se encuentra 
-			// se termina el ciclo comparando el alias
-			if (alias.equals(c.getAlias())) {
+			// Si el contacto es encontrado se guarda en una variable 
+			if (alias.equalsIgnoreCase(c.getAlias())) {
+				contactoEncontrado = c;
 				break;
 			}
-			indexContacto++;
 		}
-		// Se consigue el contacto del cual se quiere eliminar un teléfono
-		Contacto c = agenda.get(indexContacto);
-		// Se obtiene su lista de teléfonos
-		for (Telefono t : c.getTelefonos()) {
-			// Se busca el index del teléfono que se quiere eliminar comparando
-			// los números y los prefijos
+		//Si el contacto no se encuentra en la lista se aborta
+		if (contactoEncontrado == null) {
+			System.out.println("-- Error: Contacto no encontrado --");
+			return;
+		}
+		//Una vez que sabemos que el contacto existe buscamos su teléfono en la lista
+		for (Telefono t : contactoEncontrado.getTelefonos()) {
+			//De encontrar el teléfono en la lista se guarda en una variable
 			if (t1.getNumTel().equals(t.getNumTel()) && t1.getPrefijo().equals(t.getPrefijo())) {
+				telefonoAEliminar = t;
 				break;
-			}
-			indexTelefono++;
+			} 
 		}
-		// Se elimina de la lista de teléfonos del contacto
-		c.getTelefonos().remove(indexTelefono);
-		System.out.println("-- Teléfono eliminado del contacto --");
+		//Si se encontró el teléfono se elimina de ese contacto
+		if (telefonoAEliminar != null) {
+			//Se verifica que el telefono a eliminar sea del tipo que especificó el usuario
+			if (telefonoAEliminar.getTipo() == tipo) {
+				contactoEncontrado.getTelefonos().remove(telefonoAEliminar);
+				System.out.println("-- Teléfono eliminado con éxito --");
+			} else {
+				System.out.println("-- Error: El teléfono existe pero no es tipo [" +tipo+ "]");
+			}
+		} else { //De lo contrario, se le hace saber al usuario que no existe ese teléfono
+			System.out.println("-- Error: Este teléfono no existe para este contacto --");
+		}
 	}
 	//h) Método para consultar a una persona y obtener sus datos
 	public void consultarPersona(String dato) {

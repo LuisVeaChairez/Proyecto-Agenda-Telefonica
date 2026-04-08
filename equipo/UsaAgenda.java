@@ -1,6 +1,5 @@
 package equipo;
 /*
- * 16/03/2026
  * Asignatura: POO (Programación Orientada a Objetos)
  * Unidad 3: Proyecto en equipo
  * Clase: UsaAgenda
@@ -34,7 +33,7 @@ public class UsaAgenda {
 		}
 		sc.nextLine();
 		
-		//Validación del prefijo 
+		//Validación del prefijo
 		System.out.println("-- Ingrese el prefijo (2 dígitos) --");
 		prefijo = sc.nextLine();
 		while (!regexPrefijo.matcher(prefijo).matches()) {
@@ -49,10 +48,8 @@ public class UsaAgenda {
 			System.out.println("-- Error: Ingrese un número de 10 dígitos --"); 
 			numeroTel = sc.nextLine();
 		}
-		
 		return new Telefono(tipo, prefijo, numeroTel);
 	}
-	
 	// Como se usa varias veces este trozo de código (exactamente igual) se hizo mejor una función
 	// para ahorrar líneas de código
 	public static String revisarCorreo(Agenda miAgenda, String correoInicial, Scanner sc) {
@@ -88,10 +85,13 @@ public class UsaAgenda {
 		Telefono t2 = new Telefono('f', "52", "6516513187");
 		Contacto c1 = new Contacto("Alejandra", "Pérez", "ale", 'M', "ale@gmail.com", new ArrayList<Telefono>(List.of(t1, t2)));
 		Telefono t3 = new Telefono('m', "52", "1651315848");
-		Contacto c2 = new Contacto("Pepe", "Ernesto", "peps", 'M', "pepe@gmail.com", new ArrayList<Telefono>(List.of(t3)));
+		Contacto c2 = new Contacto("Pepe", "Ernesto", "peps", 'H', "pepe@gmail.com", new ArrayList<Telefono>(List.of(t3)));
+		Telefono t4 = new Telefono('m', "52", "6721221165");
+		Telefono t5 = new Telefono('f', "64", "6675211478");
+		Contacto c3 = new Contacto("Diego", "Lopez Olivas", "Ego", 'h', "dgo_antonio@gmail.com", new ArrayList<Telefono>(List.of(t4, t5)));
 		
 		// Dejar vacíos los paréntesis finales, es de prueba
-		ArrayList<Contacto> datosPredeterminados = new ArrayList<>(List.of(c1, c2));
+		ArrayList<Contacto> datosPredeterminados = new ArrayList<>(List.of(c1, c2, c3));
 		Agenda miAgenda = new Agenda(datosPredeterminados);
 		
 		// Como inicia con datos, esto es para que inicie ordenada
@@ -101,7 +101,7 @@ public class UsaAgenda {
 		while (true) {			
 			int eleccion;
 			char tipo, sexo;
-			String alias, prefijo, numeroTel, correo, nombre, apellidos;
+			String alias, correo, nombre, apellidos;
 			
 			// Se muestra el menú
 			System.out.println("--- Bienvenido a las operaciones disponibles. Elige una: ---"
@@ -130,8 +130,7 @@ public class UsaAgenda {
 				tipo = sc.next().toLowerCase().charAt(0);
 				
 				//Validación del tipo de teléfono
-				while (regexTipoTelefono.matcher(String.valueOf(tipo)).matches()) { 
-					sc.next(); 
+				while (!regexTipoTelefono.matcher(String.valueOf(tipo)).matches()) { 
 					tipo = sc.next().toLowerCase().charAt(0); 
 				}
 				
@@ -210,6 +209,14 @@ public class UsaAgenda {
 					nombre = sc.nextLine(); 
 				}
 				
+				System.out.println("-- Ingrese el alias del contacto --");
+				alias = sc.nextLine();
+				
+				while (!miAgenda.validarAlias(alias)) { 
+					System.out.println("-- Error: No se encontró ningún contacto con el alias ingresado --"); 
+					alias = sc.nextLine(); 
+				}
+				
 				System.out.println("-- Ingresa el nuevo correo del contacto --");
 				correo = sc.nextLine();
 		
@@ -218,7 +225,7 @@ public class UsaAgenda {
 				correo = revisarCorreo(miAgenda, correo, sc);
 				
 				// Se cambia el correo
-				miAgenda.cambiarCorreo(nombre, correo);
+				miAgenda.cambiarCorreo(nombre, alias, correo);
 				System.out.println();
 			//Agregar un teléfono a una persona
 			} else if (eleccion == 5) {
@@ -264,7 +271,7 @@ public class UsaAgenda {
 				
 				// Se obtiene el teléfono y se elimina el teléfono del contacto
 				Telefono t = crearTelefono(sc);
-				miAgenda.eliminarTelefonoContacto(alias, t);
+				miAgenda.eliminarTelefonoDeContacto(alias, t.getTipo(), t);
 				System.out.println();
 			// Opción 8: Consultar una persona (por nombre o por alias)
 			} else if (eleccion == 8) {

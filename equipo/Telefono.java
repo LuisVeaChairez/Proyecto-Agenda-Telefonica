@@ -1,9 +1,7 @@
 package equipo;
-
 import java.util.regex.Pattern;
 
 /*
- * 16/03/2026
  * Asignatura: POO (Programación Orientada a Objetos)
  * Unidad 3: Proyecto en equipo
  * Clase: Teléfono

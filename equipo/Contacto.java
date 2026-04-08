@@ -1,6 +1,5 @@
 package equipo;
 /*
- * 16/03/2026
  * Asignatura: POO (Programación Orientada a Objetos)
  * Unidad 3: Proyecto en equipo
  * Clase: Contacto
@@ -48,7 +47,7 @@ public class Contacto extends Persona {
 			this.correo = correo;
 		} 
 		else {
-			System.out.println("-- ERROR: CORREO INVÁLIDO --"); 
+			System.out.println("-- Error: Correo inválido --"); 
 		}
 	}
 	//Método auxiliar para validar correo
@@ -75,31 +74,12 @@ public class Contacto extends Persona {
 	public void setTelefonos(List<Telefono> telefonos) {
 		this.telefonos = (telefonos != null) ? telefonos : new ArrayList<>();
 	}
-	//Método para listar teléfonos del Contacto
-	public void obtenerListaDeTelefonos() {
-		System.out.println("Teléfonos de " + nombre + ": ");
-		if (telefonos.isEmpty()) {
-			System.out.println("-- No hay teléfonos registrados --");
-		} else {
-			for (int i=0; i<telefonos.size(); i++) {
-				System.out.println("["+ (i+1) +"]: " + telefonos.get(i).toString());
-			}
-		}
-	}
-	//Método para eliminar un teléfono
-	public void eliminarTelefono(int index) {
-		if (index >= 0 && index < telefonos.size()) {
-			telefonos.remove(index);
-			System.out.println("-- Teléfono eliminado con éxito --");
-		} else {
-			System.out.println("-- ERROR: El teléfono seleccionado no existe --");
-		}
-	}
 	public String toString() {
 	    StringBuilder sb = new StringBuilder();
 	    // Usamos super.toString() para traer lo que ya imprime Persona (Nombre, alias, etc.)
 	    // Si Persona no tiene toString, puedes poner: getNombre() + " " + getApellidos()
 	    sb.append("--- Contacto: ").append(getNombre()).append(" ").append(getApellidos()).append(" ---\n");
+	    sb.append("Sexo: ").append(getSexo()).append("\n");
 	    sb.append("Alias: ").append(getAlias()).append("\n");
 	    sb.append("Correo: ").append(this.correo).append("\n");
 	    sb.append("Teléfonos:\n");
